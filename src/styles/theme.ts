@@ -29,20 +29,22 @@ export const theme = {
     },
     
     // Status colors
-    success: {
-      50: '#f0fdf4',
-      500: '#22c55e',
-      600: '#16a34a',
-    },
-    warning: {
-      50: '#fffbeb',
-      500: '#f59e0b',
-      600: '#d97706',
-    },
-    error: {
-      50: '#fef2f2',
-      500: '#ef4444',
-      600: '#dc2626',
+    success: '#22c55e',
+    warning: '#f59e0b',
+    error: '#ef4444',
+    
+    // Common grays
+    gray: {
+      50: '#f9fafb',
+      100: '#f3f4f6',
+      200: '#e5e7eb',
+      300: '#d1d5db',
+      400: '#9ca3af',
+      500: '#6b7280',
+      600: '#4b5563',
+      700: '#374151',
+      800: '#1f2937',
+      900: '#111827',
     },
     
     // Gradient
@@ -102,11 +104,11 @@ export const theme = {
   },
   
   breakpoints: {
-    sm: '640px',
-    md: '768px',
-    lg: '1024px',
-    xl: '1280px',
-    '2xl': '1536px',
+    sm: 640,
+    md: 768,
+    lg: 1024,
+    xl: 1280,
+    '2xl': 1536,
   },
   
   zIndex: {
@@ -116,6 +118,7 @@ export const theme = {
     modal: 1040,
     popover: 1050,
     tooltip: 1060,
+    toast: 1070,
   },
   
   transitions: {

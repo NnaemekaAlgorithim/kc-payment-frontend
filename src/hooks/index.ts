@@ -114,8 +114,11 @@ export const useClickOutside = (
 };
 
 // Hook for managing form state
-export const useForm = <T extends Record<string, any>>(initialValues: T) => {
-  const [values, setValues] = useState<T>(initialValues);
+export const useForm = <T extends Record<string, any>>(config: {
+  initialValues: T;
+  validate?: (values: T) => Partial<Record<keyof T, string>>;
+}) => {
+  const [values, setValues] = useState<T>(config.initialValues);
   const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({});
   const [touched, setTouchedState] = useState<Partial<Record<keyof T, boolean>>>({});
 
@@ -123,7 +126,7 @@ export const useForm = <T extends Record<string, any>>(initialValues: T) => {
     setValues(prev => ({ ...prev, [name]: value }));
   };
 
-  const setError = (name: keyof T, error: string) => {
+  const setFieldError = (name: keyof T, error: string) => {
     setErrors(prev => ({ ...prev, [name]: error }));
   };
 
@@ -131,11 +134,27 @@ export const useForm = <T extends Record<string, any>>(initialValues: T) => {
     setTouchedState(prev => ({ ...prev, [name]: true }));
   };
 
+  const validateForm = () => {
+    if (!config.validate) return true;
+    
+    const validationErrors = config.validate(values);
+    setErrors(validationErrors);
+    
+    // Mark all fields as touched
+    const allTouched = Object.keys(values).reduce((acc, key) => {
+      acc[key as keyof T] = true;
+      return acc;
+    }, {} as Partial<Record<keyof T, boolean>>);
+    setTouchedState(allTouched);
+    
+    return Object.keys(validationErrors).length === 0;
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setValue(name as keyof T, value);
     if (errors[name as keyof T]) {
-      setError(name as keyof T, '');
+      setFieldError(name as keyof T, '');
     }
   };
 
@@ -145,7 +164,7 @@ export const useForm = <T extends Record<string, any>>(initialValues: T) => {
   };
 
   const reset = () => {
-    setValues(initialValues);
+    setValues(config.initialValues);
     setErrors({});
     setTouchedState({});
   };
@@ -155,8 +174,9 @@ export const useForm = <T extends Record<string, any>>(initialValues: T) => {
     errors,
     touched,
     setValue,
-    setError,
+    setFieldError,
     setTouched,
+    validateForm,
     handleChange,
     handleBlur,
     reset,

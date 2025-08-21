@@ -1,8 +1,17 @@
+import React from 'react';
 import styled, { css } from 'styled-components';
 import { theme } from '../../styles/theme';
 
 interface InputProps {
   hasError?: boolean;
+  size?: 'sm' | 'md' | 'lg';
+  icon?: React.ReactNode;
+  error?: string | boolean;
+}
+
+interface StyledInputProps {
+  $hasError?: boolean;
+  $hasIcon?: boolean;
   size?: 'sm' | 'md' | 'lg';
 }
 
@@ -19,7 +28,26 @@ export const Label = styled.label`
   color: ${theme.colors.secondary[700]};
 `;
 
-export const Input = styled.input<InputProps>`
+const InputWrapper = styled.div`
+  position: relative;
+  width: 100%;
+`;
+
+const IconWrapper = styled.div`
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: ${theme.colors.gray[400]};
+  pointer-events: none;
+  z-index: 1;
+  
+  svg {
+    font-size: 1rem;
+  }
+`;
+
+export const StyledInput = styled.input<StyledInputProps>`
   width: 100%;
   border: 2px solid ${theme.colors.secondary[300]};
   border-radius: ${theme.borderRadius.lg};
@@ -31,27 +59,29 @@ export const Input = styled.input<InputProps>`
   -webkit-border-radius: ${theme.borderRadius.lg};
   touch-action: manipulation;
   
-  ${({ size = 'md' }) => {
+  ${({ size = 'md', $hasIcon }) => {
+    const leftPadding = $hasIcon ? '2.75rem' : theme.spacing.md;
+    
     switch (size) {
       case 'sm':
         return css`
-          padding: ${theme.spacing.sm} ${theme.spacing.md};
+          padding: ${theme.spacing.sm} ${theme.spacing.md} ${theme.spacing.sm} ${leftPadding};
           font-size: 16px; /* Prevents zoom on iOS */
           height: 2.25rem;
           min-height: 44px; /* Touch target */
         `;
       case 'lg':
         return css`
-          padding: ${theme.spacing.md} ${theme.spacing.lg};
+          padding: ${theme.spacing.md} ${theme.spacing.lg} ${theme.spacing.md} ${leftPadding};
           font-size: 16px; /* Prevents zoom on iOS */
           height: 3.5rem;
           min-height: 48px; /* Touch target */
         `;
       default:
         return css`
-          padding: ${theme.spacing.sm} ${theme.spacing.md};
+          padding: ${theme.spacing.md} ${theme.spacing.md} ${theme.spacing.md} ${leftPadding};
           font-size: 16px; /* Prevents zoom on iOS */
-          height: 2.75rem;
+          height: 3rem;
           min-height: 44px; /* Touch target */
         `;
     }
@@ -67,7 +97,7 @@ export const Input = styled.input<InputProps>`
     color: ${theme.colors.secondary[500]};
   }
   
-  ${({ hasError }) => hasError && css`
+  ${({ $hasError }) => $hasError && css`
     border-color: ${theme.colors.error[500]};
     
     &:focus {
@@ -83,7 +113,7 @@ export const Input = styled.input<InputProps>`
   }
   
   /* Mobile-specific optimizations */
-  @media (max-width: ${theme.breakpoints.md}) {
+  @media (max-width: ${theme.breakpoints.md}px) {
     /* Better spacing for mobile */
     margin-bottom: ${theme.spacing.xs};
     
@@ -105,7 +135,29 @@ export const Input = styled.input<InputProps>`
   }
 `;
 
-export const TextArea = styled.textarea<InputProps>`
+export const Input: React.FC<InputProps & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>> = ({
+  hasError,
+  size = 'md',
+  icon,
+  error,
+  ...props
+}) => {
+  const isError = hasError || !!error;
+  
+  return (
+    <InputWrapper>
+      {icon && <IconWrapper>{icon}</IconWrapper>}
+      <StyledInput
+        $hasError={isError}
+        $hasIcon={!!icon}
+        size={size}
+        {...props}
+      />
+    </InputWrapper>
+  );
+};
+
+export const TextArea = styled.textarea<StyledInputProps>`
   width: 100%;
   min-height: 120px;
   padding: ${theme.spacing.md};
@@ -132,7 +184,7 @@ export const TextArea = styled.textarea<InputProps>`
     color: ${theme.colors.secondary[500]};
   }
   
-  ${({ hasError }) => hasError && css`
+  ${({ $hasError }) => $hasError && css`
     border-color: ${theme.colors.error[500]};
     
     &:focus {
@@ -148,7 +200,7 @@ export const TextArea = styled.textarea<InputProps>`
   }
   
   /* Mobile-specific optimizations */
-  @media (max-width: ${theme.breakpoints.md}) {
+  @media (max-width: ${theme.breakpoints.md}px) {
     min-height: 100px;
     
     /* Better focus visibility on mobile */
