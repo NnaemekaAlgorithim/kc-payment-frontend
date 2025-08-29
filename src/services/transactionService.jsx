@@ -1,4 +1,4 @@
-import { axiosInstance, handleError } from "../utils/axiosInstance";
+import { axiosInstance, handleError } from "../utils/axiosinstance";
 
 export const submitProofOfPayment = async (data) => {
   try {

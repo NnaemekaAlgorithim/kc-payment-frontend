@@ -3,7 +3,7 @@ import { Form, Field } from "react-final-form";
 import UserDashboardLayout from "../../../components/layouts/user-dashboard";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
-import Button from "@/components/ui/button";
+import Button from "@/components/ui/Button";
 
 const initialValues = {
   firstName: "",

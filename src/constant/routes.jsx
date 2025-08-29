@@ -1,6 +1,6 @@
 import React from "react";
 
-const HomePage = React.lazy(() => import("../pages/landing-page/Homepage.jsx"));
+const HomePage = React.lazy(() => import("../pages/landing-page/HomePage.jsx"));
 const Login = React.lazy(() => import("../pages/auth/login.jsx"));
 const Signup = React.lazy(() => import("../pages/auth/signup.jsx"));
 const UserHomepage = React.lazy(

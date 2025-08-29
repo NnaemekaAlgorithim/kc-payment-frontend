@@ -2,7 +2,7 @@ import React from "react";
 import WorkerDashboardLayout from "../../../components/layouts/worker-dashboard-layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
-import Button from "@/components/ui/button";
+import Button from "@/components/ui/Button";
 import { Form, Field } from "react-final-form";
 
 function WorkerAccount() {

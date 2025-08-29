@@ -2,7 +2,7 @@ import React from "react";
 import { Form, Field } from "react-final-form";
 import UserDashboardLayout from "../../../components/layouts/user-dashboard";
 import { Card, CardContent } from "@/components/ui/card";
-import Button from "@/components/ui/button";
+import Button from "@/components/ui/Button";
 import { toast } from "sonner";
 import { useProofOfPayment } from "../../../hooks/react-query/useTransaction";
 const initialValues = {

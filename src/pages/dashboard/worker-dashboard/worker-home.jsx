@@ -1,7 +1,7 @@
 import React from "react";
 import WorkerDashboardLayout from "../../../components/layouts/worker-dashboard-layout";
 import { Card, CardContent } from "@/components/ui/card";
-import Button from "../../../components/ui/button";
+import Button from "../../../components/ui/Button";
 import { Wallet, RefreshCw } from "lucide-react";
 import { transactions, columns } from "../../../constant/DashBoard";
 import { Link } from "react-router-dom";
