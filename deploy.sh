@@ -24,7 +24,7 @@ echo "📦 Installing npm dependencies..."
 npm install || { echo "❌ npm install failed"; exit 1; }
 
 # Step 4: Build project
-sudo chown -R $USER:$USER /home/nwodo/Inventory_master_frontend/inventory-management/dist
+sudo chown -R $USER:$USER /home/nwodo/kc-payment-frontend/dist
 echo "⚙️ Building frontend with Vite..."
 npm run build || { echo "❌ Build failed"; exit 1; }
 
