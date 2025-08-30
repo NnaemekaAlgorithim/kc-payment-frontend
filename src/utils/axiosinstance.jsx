@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 
 const baseURL =
-  import.meta.env.REACT_APP_API_URL || "http://34.44.132.174/dev/api/";
+  import.meta.env.REACT_APP_API_URL || "http://34.39.149.65/dev/api/";
 
 if (!baseURL) {
   throw new Error(

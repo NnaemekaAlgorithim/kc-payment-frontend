@@ -69,11 +69,11 @@ const Header = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-white/98 backdrop-blur-lg z-50 flex flex-col justify-center items-center gap-8"
+            className="absolute top-full left-0 w-full bg-white shadow-lg z-50 flex flex-col items-center gap-6 py-6"
           >
             {/* Close button */}
             <button
-              className="absolute top-6 right-6 text-gray-700 text-3xl p-2"
+              className="absolute top-4 right-4 text-gray-700 text-2xl p-2"
               onClick={closeMobileMenu}
             >
               <FaTimes />
@@ -82,32 +82,32 @@ const Header = () => {
             <a
               href="#features"
               onClick={closeMobileMenu}
-              className="text-2xl font-medium text-gray-700"
+              className="text-lg font-medium text-gray-700 hover:text-primary"
             >
               Features
             </a>
             <a
               href="#pricing"
               onClick={closeMobileMenu}
-              className="text-2xl font-medium text-gray-700"
+              className="text-lg font-medium text-gray-700 hover:text-primary"
             >
               Pricing
             </a>
             <a
               href="#contact"
               onClick={closeMobileMenu}
-              className="text-2xl font-medium text-gray-700"
+              className="text-lg font-medium text-gray-700 hover:text-primary"
             >
               Contact
             </a>
 
-            {/* Buttons stacked */}
-            <div className="flex flex-col gap-4 w-4/5 max-w-xs">
+            {/* Buttons */}
+            <div className="flex flex-col gap-3 w-4/5 max-w-xs">
               <Button
                 variant="outline"
                 fullWidth
                 onClick={() => {
-                  onLoginClick?.();
+                  navigate("/login");
                   closeMobileMenu();
                 }}
               >
@@ -116,7 +116,7 @@ const Header = () => {
               <Button
                 fullWidth
                 onClick={() => {
-                  onSignupClick?.();
+                  navigate("/signup");
                   closeMobileMenu();
                 }}
               >
