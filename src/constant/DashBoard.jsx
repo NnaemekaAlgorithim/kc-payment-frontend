@@ -112,45 +112,68 @@ export const Ttransactions = [
   },
 ];
 
-// Columns for the table
 export const Transactionscolumns = [
   {
     name: "Transaction ID",
     selector: (row) => row.id,
     sortable: true,
-    width: "150px",
+    width: "200px",
   },
   {
-    name: "Amount (₦)",
+    name: "Amount",
     selector: (row) => row.amount,
     sortable: true,
-  },
-  {
-    name: "Converted (¥)",
-    selector: (row) => row.converted,
-    sortable: true,
+    cell: (row) =>
+      new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: row.currency || "USD", // dynamic currency
+        minimumFractionDigits: 2,
+      }).format(row.amount),
   },
   {
     name: "Status",
-    selector: (row) => row.status,
+    selector: (row) => row.status_display,
     sortable: true,
-    cell: (row) => (
-      <span
-        className={`px-2 py-1 rounded text-xs font-medium ${
-          row.status === "Completed"
-            ? "bg-green-100 text-green-700"
-            : row.status === "Pending"
-              ? "bg-yellow-100 text-yellow-700"
-              : "bg-red-100 text-red-700"
-        }`}
-      >
-        {row.status}
-      </span>
-    ),
+    cell: (row) => {
+      let colorClass = "bg-gray-100 text-gray-700"; // fallback
+      switch (row.status?.toLowerCase()) {
+        case "completed":
+          colorClass = "bg-green-100 text-green-700";
+          break;
+        case "pending":
+        case "processing":
+          colorClass = "bg-yellow-100 text-yellow-700";
+          break;
+        case "failed":
+        case "cancelled":
+          colorClass = "bg-red-100 text-red-700";
+          break;
+      }
+      return (
+        <span
+          className={`px-2 py-1 rounded-full text-xs font-semibold ${colorClass}`}
+        >
+          {row.status_display}
+        </span>
+      );
+    },
+  },
+  {
+    name: "Receiver",
+    selector: (row) => row.receiver_account_name,
+    sortable: true,
   },
   {
     name: "Date",
-    selector: (row) => row.date,
+    selector: (row) => row.created_at,
     sortable: true,
+    cell: (row) =>
+      new Date(row.created_at).toLocaleDateString("en-GB", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
   },
 ];

@@ -8,8 +8,6 @@ import { useTransactions } from "../../../hooks/react-query/useTransaction";
 function Transactions() {
   const { data, isLoading, isError, error } = useTransactions();
 
-  console.log("Fetched Transactions:", data);
-
   return (
     <UserDashboardLayout>
       <div className="md:ml-40 md:mr-20 md:mt-20 mt-12 space-y-6">
@@ -34,12 +32,26 @@ function Transactions() {
               <DataTable
                 title="Transaction History"
                 columns={Transactionscolumns}
-                data={data?.data || []} // Adjust based on API structure
+                data={data?.response_data?.results || []}
                 pagination
                 highlightOnHover
                 striped
                 responsive
                 defaultSortFieldId={1}
+                customStyles={{
+                  headCells: {
+                    style: {
+                      fontWeight: "bold",
+                      fontSize: "14px",
+                      backgroundColor: "#f9fafb",
+                    },
+                  },
+                  rows: {
+                    style: {
+                      minHeight: "60px",
+                    },
+                  },
+                }}
               />
             )}
           </CardContent>

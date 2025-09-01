@@ -3,13 +3,14 @@ import UserDashboardLayout from "../../../components/layouts/user-dashboard";
 import { Card, CardContent } from "@/components/ui/card";
 import Button from "../../../components/ui/Button";
 import { Wallet, RefreshCw } from "lucide-react";
-import { transactions, columns } from "../../../constant/DashBoard";
 import { Link } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import Cookies from "js-cookie";
+import { useTransactions } from "../../../hooks/react-query/useTransaction";
+import { Transactionscolumns } from "../../../constant/DashBoard";
 function UserHomepage() {
   const userCookie = Cookies.get("user");
-
+  const { data, isLoading, isError, error } = useTransactions();
   let user = null;
 
   if (userCookie) {
@@ -77,13 +78,25 @@ function UserHomepage() {
           <h2 className="text-xl font-semibold mb-3">Recent Transactions</h2>
           <Card className="rounded-2xl shadow-md">
             <CardContent className="p-4">
-              <DataTable
-                columns={columns}
-                data={transactions}
-                pagination
-                highlightOnHover
-                striped
-              />
+              {isLoading ? (
+                <p className="text-gray-500">⏳ Loading transactions...</p>
+              ) : isError ? (
+                <p className="text-red-600">
+                  ❌ Failed to load transactions: {error.message}
+                </p>
+              ) : data?.response_data?.results?.length === 0 ? (
+                <p className="text-gray-600 text-center py-6">
+                  📭 No transactions yet. Start your first transaction!
+                </p>
+              ) : (
+                <DataTable
+                  columns={Transactionscolumns}
+                  data={data.response_data.results}
+                  pagination
+                  highlightOnHover
+                  striped
+                />
+              )}
             </CardContent>
           </Card>
         </div>

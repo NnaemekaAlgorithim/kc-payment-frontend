@@ -5,6 +5,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import Button from "@/components/ui/Button";
 import { toast } from "sonner";
 import { useProofOfPayment } from "../../../hooks/react-query/useTransaction";
+import { submitProofOfPayment } from "../../../services/transactionService";
+import { CreateTransactionvalidate } from "../../../utils/validation-schema";
+import {
+  InputField,
+  SelectField,
+  FileField,
+} from "../../../components/ui/TextInputs";
+
 const initialValues = {
   amount: "",
   currency: "USD",
@@ -24,50 +32,15 @@ const initialValues = {
 export default function ProofOfPayment() {
   const proofMutation = useProofOfPayment();
 
-  const onSubmit = (values) => {
-    proofMutation.mutate(values);
+  const onSubmit = async (values) => {
+    try {
+      console.log("Form Values:", values);
+      await submitProofOfPayment(values);
+      toast.success("Proof of Payment submitted successfully!");
+    } catch (err) {
+      toast.error("Failed to submit proof of payment");
+    }
   };
-
-  const InputField = ({
-    name,
-    label,
-    type = "text",
-    placeholder,
-    fullWidth = false,
-  }) => (
-    <Field name={name}>
-      {({ input, meta }) => (
-        <div className={fullWidth ? "col-span-2" : ""}>
-          <label className="block text-sm font-medium mb-1">{label}</label>
-          <input
-            {...input}
-            type={type}
-            placeholder={placeholder}
-            className="w-full px-4 py-3 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          />
-          {meta.touched && meta.error && (
-            <p className="text-sm text-red-500 mt-1">{meta.error}</p>
-          )}
-        </div>
-      )}
-    </Field>
-  );
-
-  const FileField = ({ name, label }) => (
-    <Field name={name}>
-      {({ input }) => (
-        <div className="mt-4">
-          <label className="block text-sm font-medium mb-1">{label}</label>
-          <input
-            type="file"
-            accept="image/*,application/pdf"
-            onChange={(e) => input.onChange(e.target.files[0])}
-            className="w-full px-4 py-3 border rounded-lg"
-          />
-        </div>
-      )}
-    </Field>
-  );
 
   return (
     <UserDashboardLayout>
@@ -82,6 +55,7 @@ export default function ProofOfPayment() {
         <Form
           onSubmit={onSubmit}
           initialValues={initialValues}
+          validate={CreateTransactionvalidate}
           render={({ handleSubmit }) => (
             <form className="space-y-8" onSubmit={handleSubmit}>
               {/* User Payment Card */}
@@ -97,15 +71,23 @@ export default function ProofOfPayment() {
                       type="number"
                       placeholder="Enter amount"
                     />
-                    <InputField
+                    <SelectField
                       name="currency"
                       label="Currency"
-                      placeholder="USD"
+                      options={[
+                        { value: "USD", label: "US Dollar (USD)" },
+                        { value: "NGN", label: "Nigerian Naira (NGN)" },
+                        { value: "CNY", label: "Chinese Yuan (CNY)" },
+                      ]}
                     />
-                    <InputField
+                    <SelectField
                       name="user_payment_method"
                       label="Payment Method"
-                      placeholder="Bank Transfer"
+                      options={[
+                        { value: "bank_transfer", label: "Bank Transfer" },
+                        { value: "paypal", label: "PayPal" },
+                        { value: "crypto", label: "Crypto" },
+                      ]}
                     />
                     <InputField
                       name="user_payment_reference"
@@ -137,7 +119,7 @@ export default function ProofOfPayment() {
 
               {/* Receiver Details Card */}
               <Card className="rounded-2xl shadow-md">
-                <CardContent className=" md:p-6 space-y-4">
+                <CardContent className="md:p-6 space-y-4">
                   <h3 className="text-lg font-semibold text-green-600">
                     Receiver Details
                   </h3>
@@ -147,7 +129,7 @@ export default function ProofOfPayment() {
                       name="receiver_account_name"
                       label="Receiver Account Name"
                       placeholder="Jane Smith Business"
-                      fullWidth={true} // single column on mobile, half on sm+
+                      fullWidth={true}
                     />
                     <InputField
                       name="receiver_account_number"
@@ -159,7 +141,7 @@ export default function ProofOfPayment() {
                       name="receiver_swift_code"
                       label="Receiver SWIFT Code"
                       placeholder="CHASUS33XXX"
-                      fullWidth={true} // spans both columns
+                      fullWidth={true}
                     />
                     <FileField
                       name="receiver_qr"
@@ -170,7 +152,7 @@ export default function ProofOfPayment() {
               </Card>
 
               {/* Submit */}
-              <div className="">
+              <div>
                 <Button
                   className="w-full"
                   loading={proofMutation.isPending}

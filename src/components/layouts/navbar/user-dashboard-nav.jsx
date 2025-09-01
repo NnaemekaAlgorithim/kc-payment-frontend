@@ -2,10 +2,11 @@ import { useState, useRef, useEffect } from "react";
 import { FaCreditCard } from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
 import Avatar from "react-avatar";
-import { FaSignOutAlt } from "react-icons/fa";
+import { FaSignOutAlt, FaBell } from "react-icons/fa";
 
 function DashboardNavbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [notifications] = useState(3); // example: 3 unread
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
   const user = { firstName: "John", lastName: "Doe" };
@@ -35,8 +36,19 @@ function DashboardNavbar() {
         </div>
       </NavLink>
 
-      {/* User Avatar */}
+      {/* Right Section */}
       <div className="flex items-center space-x-6 relative">
+        {/* Notification Icon */}
+        <div className="relative cursor-pointer">
+          <FaBell className="text-gray-600 text-lg" />
+          {notifications > 0 && (
+            <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+              {notifications}
+            </span>
+          )}
+        </div>
+
+        {/* User Avatar */}
         <div
           className="cursor-pointer"
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -54,7 +66,7 @@ function DashboardNavbar() {
         {isDropdownOpen && (
           <div
             ref={dropdownRef}
-            className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
+            className="absolute right-0 mt-12 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
           >
             <button
               onClick={handleLogout}

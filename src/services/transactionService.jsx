@@ -11,7 +11,7 @@ export const submitProofOfPayment = async (data) => {
       }
     });
 
-    const response = await axiosInstance.post("transactions", formData, {
+    const response = await axiosInstance.post("transactions/", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
     console.log(response, "response from submit proof of payment");
