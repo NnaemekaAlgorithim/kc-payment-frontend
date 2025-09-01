@@ -14,7 +14,12 @@ function UserHomepage() {
   let user = null;
 
   if (userCookie) {
-    user = JSON.parse(userCookie);
+    try {
+      const parsed = JSON.parse(userCookie);
+      user = parsed.user || null;
+    } catch {
+      user = null;
+    }
   }
   return (
     <UserDashboardLayout>
@@ -22,7 +27,7 @@ function UserHomepage() {
         {/* Welcome Message */}
         <div>
           <h1 className="text-3xl font-bold">
-            👋 Welcome back {user.first_name}!
+            👋 Welcome back {user ? user.first_name : ""}!
           </h1>
           <p className="text-gray-600 mt-1">
             Manage your exchanges, track your transactions, and send money with
