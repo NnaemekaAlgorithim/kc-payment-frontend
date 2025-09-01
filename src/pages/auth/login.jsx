@@ -6,6 +6,7 @@ import Button from "../../components/ui/Button";
 import { loginSchema } from "../../utils/schemas";
 import { useLogin } from "../../hooks/react-query/useAuth";
 import { toast } from "sonner";
+import Cookies from "js-cookie";
 
 const initialValues = {
   email: "",
@@ -23,6 +24,13 @@ export default function Login() {
           toast.success("Login successful!");
 
           const user = response.data.user;
+          const access_token = response.data.access_token;
+          const refresh_token = response.data.refresh_token;
+
+          // Save user and tokens in cookies
+          Cookies.set("user", JSON.stringify(response.data), { path: "/" });
+          Cookies.set("access_token", access_token, { path: "/" });
+          Cookies.set("refresh_token", refresh_token, { path: "/" });
 
           if (user.is_staff) {
             navigate("/admin/dashboard");
