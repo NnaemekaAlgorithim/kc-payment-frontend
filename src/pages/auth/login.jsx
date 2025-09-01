@@ -29,8 +29,8 @@ export default function Login() {
 
           // Save user and tokens in cookies
           Cookies.set("user", JSON.stringify(response.data), { path: "/" });
-          Cookies.set("access_token", access_token, { path: "/" });
-          Cookies.set("refresh_token", refresh_token, { path: "/" });
+          Cookies.set("accessToken", access_token, { path: "/" });
+          Cookies.set("refreshToken", refresh_token, { path: "/" });
 
           if (user.is_staff) {
             navigate("/admin/dashboard");

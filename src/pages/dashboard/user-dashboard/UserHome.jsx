@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import UserDashboardLayout from "../../../components/layouts/user-dashboard";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,7 +12,7 @@ import { Transactionscolumns } from "../../../constant/DashBoard";
 function UserHomepage() {
   const navigate = useNavigate();
   const userCookie = Cookies.get("user");
-  const accessToken = Cookies.get("access_token");
+  const accessToken = Cookies.get("accessToken");
   const { data, isLoading, isError, error } = useTransactions();
   let user = null;
 
@@ -24,6 +24,12 @@ function UserHomepage() {
       user = null;
     }
   }
+
+  useEffect(() => {
+    if (!user || !accessToken) {
+      navigate("/login");
+    }
+  }, [user, accessToken, navigate]);
 
   return (
     <UserDashboardLayout>
