@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import UserDashboardLayout from "../../../components/layouts/user-dashboard";
 import { Card, CardContent } from "@/components/ui/card";
@@ -24,12 +24,6 @@ function UserHomepage() {
       user = null;
     }
   }
-
-  useEffect(() => {
-    if (!user || !accessToken) {
-      navigate("/login");
-    }
-  }, [user, accessToken, navigate]);
 
   return (
     <UserDashboardLayout>
